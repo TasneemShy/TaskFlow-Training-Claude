@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getDashboardTasks } from '@/lib/dashboard-tasks';
 import { getProject } from '@/lib/queries';
 import { formatDueDate } from '@/lib/due-date';
+import { truncate } from '@/lib/truncate';
 
 export default function DashboardPage() {
   const tasks = getDashboardTasks();
