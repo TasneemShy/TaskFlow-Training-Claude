@@ -1,16 +1,26 @@
-const cache = new Map<number, number>();
+interface CacheEntry {
+  count: number;
+  stale: boolean;
+}
+
+const cache = new Map<number, CacheEntry>();
 
 export function getCachedTaskCount(projectId: number, compute: () => number): number {
-  if (cache.has(projectId)) {
-    return cache.get(projectId)!;
+  const entry = cache.get(projectId);
+  if (entry) {
+    return entry.count;
   }
+
   const count = compute();
-  cache.set(projectId, count);
+  cache.set(projectId, { count, stale: false });
   return count;
 }
 
 export function invalidateTaskCount(projectId: number): void {
-  cache.delete(projectId);
+  const entry = cache.get(projectId);
+  if (entry) {
+    entry.stale = true;
+  }
 }
 
 /** Test-only: clears the whole cache. */
