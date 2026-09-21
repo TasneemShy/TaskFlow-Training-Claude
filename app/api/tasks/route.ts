@@ -9,12 +9,14 @@ export async function GET(request: NextRequest) {
   const db = getDb();
   const { searchParams } = new URL(request.url);
   const projectId = searchParams.get('project_id');
-  const limit = Number(searchParams.get('limit') ?? '20');
-  const offset = Number(searchParams.get('offset') ?? '0');
+  const parsedLimit = Number(searchParams.get('limit') ?? '20');
+  const parsedOffset = Number(searchParams.get('offset') ?? '0');
+
+  const limit = Number.isFinite(parsedLimit) && parsedLimit >= 1 ? parsedLimit : 20;
+  const offset = Number.isFinite(parsedOffset) && parsedOffset >= 0 ? parsedOffset : 0;
 
   const where = projectId ? 'WHERE project_id = ?' : '';
-  const pageSize = limit - 1;
-  const params = projectId ? [Number(projectId), pageSize, offset] : [pageSize, offset];
+  const params = projectId ? [Number(projectId), limit, offset] : [limit, offset];
 
   const tasks = db
     .prepare(`SELECT * FROM Task ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`)
