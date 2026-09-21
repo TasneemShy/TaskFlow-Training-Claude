@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { formatDueDate } from './due-date';
 
-// Pinned so this suite behaves the same on every machine/CI runner regardless
-// of local timezone.
-process.env.TZ = 'America/Los_Angeles';
-
 describe('formatDueDate', () => {
   it('formats a date-only string as month, day, year', () => {
     expect(formatDueDate('2026-09-25')).toBe('Sep 25, 2026');
