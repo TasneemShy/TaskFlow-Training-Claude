@@ -21,4 +21,14 @@ describe('checkRateLimit', () => {
     await checkRateLimit('user:3', 1, 60_000);
     expect(await checkRateLimit('user:4', 1, 60_000)).toBe(true);
   });
+
+  it('never admits more than the limit under concurrent calls', async () => {
+    const limit = 5;
+    const results = await Promise.all(
+      Array.from({ length: 20 }, () => checkRateLimit('user:5', limit, 60_000)),
+    );
+
+    const admitted = results.filter(Boolean).length;
+    expect(admitted).toBe(limit);
+  });
 });

@@ -10,9 +10,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const name = typeof body.name === 'string' ? body.name.trim() : '';
 
-  if (!name) {
+  if (body.name === undefined || body.name === null) {
     return NextResponse.json({ error: 'Project name is required.' }, { status: 400 });
   }
 
@@ -20,7 +19,7 @@ export async function POST(request: NextRequest) {
   const result = db
     .prepare('INSERT INTO Project (name, description, created_at) VALUES (?, ?, ?)')
     .run(
-      name,
+      body.name,
       typeof body.description === 'string' ? body.description : '',
       new Date().toISOString(),
     );
