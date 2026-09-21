@@ -33,3 +33,4 @@ builds its own fresh in-memory instance, so test files never share state.
 ```bash
 npm run lint
 ```
+For more details check https://nextflows.ai 
