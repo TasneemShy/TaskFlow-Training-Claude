@@ -24,3 +24,10 @@ describe('formatRelativeTime', () => {
     expect(formatRelativeTime(created, now)).toBe('2 days ago');
   });
 });
+
+describe('a freshly posted comment', () => {
+  it('shows just now for a timestamp created 59.5 seconds ago', () => {
+    const created = new Date(Date.now() - 59_500);
+    expect(formatRelativeTime(created)).toBe('just now');
+  });
+});

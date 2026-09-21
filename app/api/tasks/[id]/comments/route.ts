@@ -9,10 +9,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   const limit = Number(searchParams.get('limit') ?? '10');
   const offset = Number(searchParams.get('offset') ?? '0');
 
+  // Fetch one extra row so we can tell whether another page follows.
+  const pageSize = limit + 1;
+
   const db = getDb();
   const comments = db
     .prepare('SELECT * FROM Comment WHERE task_id = ? ORDER BY created_at ASC LIMIT ? OFFSET ?')
-    .all(taskId, limit, offset) as Comment[];
+    .all(taskId, pageSize, offset) as Comment[];
 
   return NextResponse.json({ comments });
 }
