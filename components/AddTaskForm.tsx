@@ -18,7 +18,7 @@ export function AddTaskForm({ projectId }: AddTaskFormProps) {
     event.preventDefault();
 
     const trimmedTitle = title.trim();
-    if (!trimmedTitle) {
+    if (!title) {
       setError('Title is required.');
       return;
     }

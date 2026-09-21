@@ -13,7 +13,8 @@ export async function GET(request: NextRequest) {
   const offset = Number(searchParams.get('offset') ?? '0');
 
   const where = projectId ? 'WHERE project_id = ?' : '';
-  const params = projectId ? [Number(projectId), limit, offset] : [limit, offset];
+  const pageSize = limit - 1;
+  const params = projectId ? [Number(projectId), pageSize, offset] : [pageSize, offset];
 
   const tasks = db
     .prepare(`SELECT * FROM Task ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`)
